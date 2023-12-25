@@ -49,6 +49,10 @@ export interface Transcriber {
     setSubtask: (subtask: string) => void;
     language?: string;
     setLanguage: (language: string) => void;
+    addTranslatedTranscript: boolean;
+    setAddTranslatedTranscript: (model: boolean) => void;
+    targetLanguage?: string;
+    setTargetLanguage: (language: string) => void;
 }
 
 export function useTranscriber(): Transcriber {
@@ -137,6 +141,12 @@ export function useTranscriber(): Transcriber {
     const [language, setLanguage] = useState<string>(
         Constants.DEFAULT_LANGUAGE,
     );
+    const [addTranslatedTranscript, setAddTranslatedTranscript] =
+        useState<boolean>(Constants.DEFAULT_ADD_TRANSLATED_TRANSCRIPT);
+
+    const [targetLanguage, setTargetLanguage] = useState<string>(
+        Constants.DEFAULT_TARGET_LANGUAGE,
+    );
 
     const onInputChange = useCallback(() => {
         setTranscript(undefined);
@@ -157,7 +167,7 @@ export function useTranscriber(): Transcriber {
 
                     audio = new Float32Array(left.length);
                     for (let i = 0; i < audioData.length; ++i) {
-                        audio[i] = SCALING_FACTOR * (left[i] + right[i]) / 2;
+                        audio[i] = (SCALING_FACTOR * (left[i] + right[i])) / 2;
                     }
                 } else {
                     // If the audio is not stereo, we can just use the first channel:
@@ -196,6 +206,10 @@ export function useTranscriber(): Transcriber {
             setSubtask,
             language,
             setLanguage,
+            addTranslatedTranscript,
+            setAddTranslatedTranscript,
+            targetLanguage,
+            setTargetLanguage,
         };
     }, [
         isBusy,

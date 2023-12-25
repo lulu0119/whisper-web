@@ -133,11 +133,11 @@ export function AudioManager(props: { transcriber: Transcriber }) {
     const [progress, setProgress] = useState<number | undefined>(undefined);
     const [audioData, setAudioData] = useState<
         | {
-              buffer: AudioBuffer;
-              url: string;
-              source: AudioSource;
-              mimeType: string;
-          }
+            buffer: AudioBuffer;
+            url: string;
+            source: AudioSource;
+            mimeType: string;
+        }
         | undefined
     >(undefined);
     const [audioDownloadUrl, setAudioDownloadUrl] = useState<
@@ -405,17 +405,16 @@ function SettingsModal(props: {
                                 )
                             )
                             .map((key) => (
-                                <option key={key} value={key}>{`${key}${
-                                    (props.transcriber.multilingual || key.startsWith('distil-whisper/')) ? "" : ".en"
-                                } (${
+                                <option key={key} value={key}>{`${key}${(props.transcriber.multilingual || key.startsWith('distil-whisper/')) ? "" : ".en"
+                                    } (${
                                     // @ts-ignore
                                     models[key][
-                                        props.transcriber.quantized ? 0 : 1
+                                    props.transcriber.quantized ? 0 : 1
                                     ]
-                                }MB)`}</option>
+                                    }MB)`}</option>
                             ))}
                     </select>
-                    <div className='flex justify-between items-center mb-3 px-1'>
+                    <div className='flex flex-col justify-between items-start gap-1 my-3 px-1'>
                         <div className='flex'>
                             <input
                                 id='multilingual'
@@ -446,6 +445,7 @@ function SettingsModal(props: {
                                 Quantized
                             </label>
                         </div>
+
                     </div>
                     {props.transcriber.multilingual && (
                         <>
@@ -465,7 +465,43 @@ function SettingsModal(props: {
                                     </option>
                                 ))}
                             </select>
-                            <label>Select the task to perform.</label>
+                            <div className='flex my-3 px-1'>
+                                <input
+                                    id='addTranslatedTranscript'
+                                    type='checkbox'
+                                    checked={props.transcriber.addTranslatedTranscript}
+                                    onChange={(e) => {
+                                        console.log(e.target.checked, props.transcriber.addTranslatedTranscript);
+                                        props.transcriber.setAddTranslatedTranscript(
+                                            e.target.checked,
+                                        );
+                                    }}
+                                ></input>
+                                <label htmlFor={"addTranslatedTranscript"} className='ms-1'>
+                                    Add a translated transcript
+                                </label>
+                            </div>
+                            {props.transcriber.addTranslatedTranscript && (
+                                <>
+                                    <label>Translate to.</label>
+                                    <select
+                                        className='mt-1 mb-3 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
+                                        defaultValue={props.transcriber.targetLanguage}
+                                        onChange={(e) => {
+                                            props.transcriber.setTargetLanguage(
+                                                e.target.value,
+                                            );
+                                        }}
+                                    >
+                                        {Object.keys(LANGUAGES).map((key, i) => (
+                                            <option key={key} value={key}>
+                                                {names[i]}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </>
+                            )}
+                            {/* <label>Select the task to perform.</label>
                             <select
                                 className='mt-1 mb-3 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
                                 defaultValue={props.transcriber.subtask}
@@ -479,13 +515,14 @@ function SettingsModal(props: {
                                 <option value={"translate"}>
                                     Translate (to English)
                                 </option>
-                            </select>
+                            </select> */}
                         </>
                     )}
+
                 </>
             }
             onClose={props.onClose}
-            onSubmit={() => {}}
+            onSubmit={() => { }}
         />
     );
 }

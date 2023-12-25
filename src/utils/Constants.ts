@@ -31,4 +31,6 @@ export default {
     DEFAULT_LANGUAGE: "english",
     DEFAULT_QUANTIZED: isMobileOrTablet,
     DEFAULT_MULTILINGUAL: false,
+    DEFAULT_ADD_TRANSLATED_TRANSCRIPT: false,
+    DEFAULT_TARGET_LANGUAGE: "english",
 };
