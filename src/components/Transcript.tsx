@@ -38,6 +38,21 @@ export default function Transcript({ transcribedData }: Props) {
         const blob = new Blob([jsonData], { type: "application/json" });
         saveBlob(blob, "transcript.json");
     };
+    const exportSRT = () => {
+        let chunks = transcribedData?.chunks ?? [];
+        let srtData = chunks
+            .map((chunk, i) => {
+                let start = formatAudioTimestamp(chunk.timestamp[0]);
+                let end = formatAudioTimestamp(chunk.timestamp[1] ?? chunk.timestamp[0]);
+                let text = chunk.text;
+
+                return `${i + 1}\n${start} --> ${end}\n${text}\n\n`;
+            })
+            .join("");
+
+        const blob = new Blob([srtData], { type: "text/plain" });
+        saveBlob(blob, "transcript.srt");
+    };
 
     // Scroll to the bottom when the component updates
     useEffect(() => {
@@ -85,6 +100,12 @@ export default function Transcript({ transcribedData }: Props) {
                         className='text-white bg-green-500 hover:bg-green-600 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-4 py-2 text-center mr-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800 inline-flex items-center'
                     >
                         Export JSON
+                    </button>
+                    <button
+                        onClick={exportSRT}
+                        className='text-white bg-green-500 hover:bg-green-600 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-4 py-2 text-center mr-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800 inline-flex items-center'
+                    >
+                        Export SRT
                     </button>
                 </div>
             )}
