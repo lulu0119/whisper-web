@@ -54,7 +54,6 @@ export default function Transcript({ transcribedData }: Props) {
         saveBlob(blob, "transcript.srt");
     };
 
-
     // Scroll to the bottom when the component updates
     useEffect(() => {
         if (divRef.current) {
